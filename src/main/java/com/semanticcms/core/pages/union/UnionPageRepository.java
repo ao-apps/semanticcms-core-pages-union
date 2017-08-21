@@ -27,7 +27,7 @@ import com.aoindustries.util.AoCollections;
 import com.semanticcms.core.model.Page;
 import com.semanticcms.core.pages.CaptureLevel;
 import com.semanticcms.core.pages.PageNotFoundException;
-import com.semanticcms.core.pages.Pages;
+import com.semanticcms.core.pages.PageRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,56 +38,56 @@ import java.util.Map;
 /**
  * Combines multiple sets of SemanticCMS pages.
  */
-public class UnionPages implements Pages {
+public class UnionPageRepository implements PageRepository {
 
-	private static final Map<List<Pages>,UnionPages> unionRepositories = new HashMap<List<Pages>,UnionPages>();
+	private static final Map<List<PageRepository>,UnionPageRepository> unionRepositories = new HashMap<List<PageRepository>,UnionPageRepository>();
 
 	/**
 	 * Gets the union repository representing the given set of repositories, creating a new repository only as-needed.
-	 * Only one {@link UnionPages} is created per unique list of underlying repositories.
+	 * Only one {@link UnionPageRepository} is created per unique list of underlying repositories.
 	 *
 	 * @param repositories  A defensive copy is made
 	 */
-	public static UnionPages getInstance(Pages ... repositories) {
-		return getInstance(new ArrayList<Pages>(Arrays.asList(repositories)));
+	public static UnionPageRepository getInstance(PageRepository ... repositories) {
+		return getInstance(new ArrayList<PageRepository>(Arrays.asList(repositories)));
 	}
 
 	/**
 	 * Gets the union repository representing the given set of repositories, creating a new repository only as-needed.
-	 * Only one {@link UnionPages} is created per unique list of underlying repositories.
+	 * Only one {@link UnionPageRepository} is created per unique list of underlying repositories.
 	 *
 	 * @param repositories  Iterated once only.
 	 */
-	public static UnionPages getInstance(Iterable<Pages> repositories) {
-		List<Pages> list = new ArrayList<Pages>();
-		for(Pages repository : repositories) list.add(repository);
+	public static UnionPageRepository getInstance(Iterable<PageRepository> repositories) {
+		List<PageRepository> list = new ArrayList<PageRepository>();
+		for(PageRepository repository : repositories) list.add(repository);
 		return getInstance(list);
 	}
 
 	/**
-	 * Only one {@link UnionPages} is created per unique list of underlying repositories.
+	 * Only one {@link UnionPageRepository} is created per unique list of underlying repositories.
 	 */
-	private static UnionPages getInstance(List<Pages> stores) {
+	private static UnionPageRepository getInstance(List<PageRepository> stores) {
 		if(stores.isEmpty()) throw new IllegalArgumentException("At least one store required");
 		synchronized(unionRepositories) {
-			UnionPages unionRepository = unionRepositories.get(stores);
+			UnionPageRepository unionRepository = unionRepositories.get(stores);
 			if(unionRepository == null) {
-				unionRepository = new UnionPages(stores.toArray(new Pages[stores.size()]));
+				unionRepository = new UnionPageRepository(stores.toArray(new PageRepository[stores.size()]));
 				unionRepositories.put(stores, unionRepository);
 			}
 			return unionRepository;
 		}
 	}
 
-	private final Pages[] repositories;
-	private final List<Pages> unmodifiableRepositories;
+	private final PageRepository[] repositories;
+	private final List<PageRepository> unmodifiableRepositories;
 
-	private UnionPages(Pages[] repositories) {
+	private UnionPageRepository(PageRepository[] repositories) {
 		this.repositories = repositories;
 		this.unmodifiableRepositories = AoCollections.optimalUnmodifiableList(Arrays.asList(repositories));
 	}
 
-	public List<Pages> getRepositories() {
+	public List<PageRepository> getRepositories() {
 		return unmodifiableRepositories;
 	}
 
@@ -96,7 +96,7 @@ public class UnionPages implements Pages {
 		StringBuilder sb = new StringBuilder();
 		sb.append("union(");
 		for(int i = 0; i < repositories.length; i++) {
-			Pages repository = repositories[i];
+			PageRepository repository = repositories[i];
 			if(i > 0) sb.append(", ");
 			sb.append(repository.toString());
 		}
@@ -105,7 +105,7 @@ public class UnionPages implements Pages {
 
 	@Override
 	public boolean exists(Path path) throws IOException {
-		for(Pages repository : repositories) {
+		for(PageRepository repository : repositories) {
 			if(repository.exists(path)) return true;
 		}
 		return false;
@@ -118,7 +118,7 @@ public class UnionPages implements Pages {
 	 */
 	@Override
 	public Page getPage(Path path, CaptureLevel captureLevel) throws IOException, PageNotFoundException {
-		for(Pages repository : repositories) {
+		for(PageRepository repository : repositories) {
 			if(repository.exists(path)) {
 				// Should we capture PageNotFoundException and try next?
 				// This would only make sense if exists is inconsistent with getPage.

@@ -22,110 +22,109 @@
  */
 package com.semanticcms.core.pages.union;
 
-import com.aoindustries.lang.NotImplementedException;
 import com.aoindustries.net.Path;
-import com.aoindustries.validation.ValidationException;
+import com.aoindustries.util.AoCollections;
 import com.semanticcms.core.model.Page;
 import com.semanticcms.core.pages.CaptureLevel;
+import com.semanticcms.core.pages.PageNotFoundException;
 import com.semanticcms.core.pages.Pages;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import javax.servlet.ServletContext;
 
 /**
  * Combines multiple sets of SemanticCMS pages.
  */
 public class UnionPages implements Pages {
 
-	private static final String INSTANCES_SERVLET_CONTEXT_KEY = UnionPages.class.getName() + ".instances";
+	private static final Map<List<Pages>,UnionPages> unionRepositories = new HashMap<List<Pages>,UnionPages>();
 
 	/**
-	 * Gets the Union repository for the given context and prefix.
-	 * Only one {@link UnionPages} is created per unique context and prefix.
+	 * Gets the union repository representing the given set of repositories, creating a new repository only as-needed.
+	 * Only one {@link UnionPages} is created per unique list of underlying repositories.
 	 *
-	 * @param  path  Must be a {@link Path valid path}.
-	 *               Any trailing slash "/" will be stripped.
+	 * @param repositories  A defensive copy is made
 	 */
-	public static UnionPages getInstance(ServletContext servletContext, Path path) {
-		// Strip trailing '/' to normalize
-		{
-			String pathStr = path.toString();
-			if(!pathStr.equals("/") && pathStr.endsWith("/")) {
-				try {
-					path = Path.valueOf(
-						pathStr.substring(0, pathStr.length() - 1)
-					);
-				} catch(ValidationException e) {
-					AssertionError ae = new AssertionError("Stripping trailing slash from path should not render it invalid");
-					ae.initCause(e);
-					throw ae;
-				}
-			}
-		}
-
-		Map<Path,UnionPages> instances;
-		synchronized(servletContext) {
-			@SuppressWarnings("unchecked")
-			Map<Path,UnionPages> map = (Map<Path,UnionPages>)servletContext.getAttribute(INSTANCES_SERVLET_CONTEXT_KEY);
-			if(map == null) {
-				map = new HashMap<Path,UnionPages>();
-				servletContext.setAttribute(INSTANCES_SERVLET_CONTEXT_KEY, map);
-			}
-			instances = map;
-		}
-		synchronized(instances) {
-			UnionPages repository = instances.get(path);
-			if(repository == null) {
-				repository = new UnionPages(servletContext, path);
-				instances.put(path, repository);
-			}
-			return repository;
-		}
-	}
-
-	final ServletContext servletContext;
-	final Path path;
-	final String prefix;
-
-	private UnionPages(ServletContext servletContext, Path path) {
-		this.servletContext = servletContext;
-		this.path = path;
-		String pathStr = path.toString();
-		this.prefix = pathStr.equals("/") ? "" : pathStr;
-	}
-
-	public ServletContext getServletContext() {
-		return servletContext;
+	public static UnionPages getInstance(Pages ... repositories) {
+		return getInstance(new ArrayList<Pages>(Arrays.asList(repositories)));
 	}
 
 	/**
-	 * Gets the path, without any trailing slash except for "/".
+	 * Gets the union repository representing the given set of repositories, creating a new repository only as-needed.
+	 * Only one {@link UnionPages} is created per unique list of underlying repositories.
+	 *
+	 * @param repositories  Iterated once only.
 	 */
-	public Path getPath() {
-		return path;
+	public static UnionPages getInstance(Iterable<Pages> repositories) {
+		List<Pages> list = new ArrayList<Pages>();
+		for(Pages repository : repositories) list.add(repository);
+		return getInstance(list);
 	}
 
 	/**
-	 * Gets the prefix useful for direct path concatenation, which is the path itself except empty string for "/".
+	 * Only one {@link UnionPages} is created per unique list of underlying repositories.
 	 */
-	public String getPrefix() {
-		return prefix;
+	private static UnionPages getInstance(List<Pages> stores) {
+		if(stores.isEmpty()) throw new IllegalArgumentException("At least one store required");
+		synchronized(unionRepositories) {
+			UnionPages unionRepository = unionRepositories.get(stores);
+			if(unionRepository == null) {
+				unionRepository = new UnionPages(stores.toArray(new Pages[stores.size()]));
+				unionRepositories.put(stores, unionRepository);
+			}
+			return unionRepository;
+		}
+	}
+
+	private final Pages[] repositories;
+	private final List<Pages> unmodifiableRepositories;
+
+	private UnionPages(Pages[] repositories) {
+		this.repositories = repositories;
+		this.unmodifiableRepositories = AoCollections.optimalUnmodifiableList(Arrays.asList(repositories));
+	}
+
+	public List<Pages> getRepositories() {
+		return unmodifiableRepositories;
 	}
 
 	@Override
 	public String toString() {
-		return "union:" + prefix;
+		StringBuilder sb = new StringBuilder();
+		sb.append("union(");
+		for(int i = 0; i < repositories.length; i++) {
+			Pages repository = repositories[i];
+			if(i > 0) sb.append(", ");
+			sb.append(repository.toString());
+		}
+		return sb.append("):").toString();
 	}
 
 	@Override
 	public boolean exists(Path path) throws IOException {
-		throw new NotImplementedException();
+		for(Pages repository : repositories) {
+			if(repository.exists(path)) return true;
+		}
+		return false;
 	}
 
+	/**
+	 * @implSpec  Searches all repositories in-order, returning the first one that {@link Pages#exists(com.aoindustries.net.Path) exists}.
+	 *
+	 * @throws PageNotFoundException when the page does not exist in any repository
+	 */
 	@Override
-	public Page getPage(Path path, CaptureLevel captureLevel) throws IOException, FileNotFoundException {
-		throw new NotImplementedException();
+	public Page getPage(Path path, CaptureLevel captureLevel) throws IOException, PageNotFoundException {
+		for(Pages repository : repositories) {
+			if(repository.exists(path)) {
+				// Should we capture PageNotFoundException and try next?
+				// This would only make sense if exists is inconsistent with getPage.
+				return repository.getPage(path, captureLevel);
+			}
+		}
+		throw new PageNotFoundException(this, path);
 	}
 }

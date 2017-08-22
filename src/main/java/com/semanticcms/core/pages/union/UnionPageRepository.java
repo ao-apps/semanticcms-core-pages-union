@@ -103,6 +103,17 @@ public class UnionPageRepository implements PageRepository {
 		return sb.append("):").toString();
 	}
 
+	/**
+	 * Available when all repositories are available.
+	 */
+	@Override
+	public boolean isAvailable() {
+		for(PageRepository repository : repositories) {
+			if(!repository.isAvailable()) return false;
+		}
+		return true;
+	}
+
 	@Override
 	public boolean exists(Path path) throws IOException {
 		for(PageRepository repository : repositories) {

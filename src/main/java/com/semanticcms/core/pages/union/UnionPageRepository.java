@@ -1,6 +1,6 @@
 /*
  * semanticcms-core-pages-union - Combines multiple sets of SemanticCMS pages.
- * Copyright (C) 2017  AO Industries, Inc.
+ * Copyright (C) 2017, 2018  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -26,7 +26,6 @@ import com.aoindustries.net.Path;
 import com.aoindustries.util.AoCollections;
 import com.semanticcms.core.model.Page;
 import com.semanticcms.core.pages.CaptureLevel;
-import com.semanticcms.core.pages.PageNotFoundException;
 import com.semanticcms.core.pages.PageRepository;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -114,28 +113,17 @@ public class UnionPageRepository implements PageRepository {
 		return true;
 	}
 
-	@Override
-	public boolean exists(Path path) throws IOException {
-		for(PageRepository repository : repositories) {
-			if(repository.exists(path)) return true;
-		}
-		return false;
-	}
-
 	/**
-	 * @implSpec  Searches all repositories in-order, returning the first one that {@link Pages#exists(com.aoindustries.net.Path) exists}.
+	 * @implSpec  Searches all repositories in-order, returning the first one that returns non-null from {@link PageRepository#getPage(com.aoindustries.net.Path, com.semanticcms.core.pages.CaptureLevel)}.
 	 *
-	 * @throws PageNotFoundException when the page does not exist in any repository
+	 * @return  the first page found or {@code null} when the page does not exist in any repository
 	 */
 	@Override
-	public Page getPage(Path path, CaptureLevel captureLevel) throws IOException, PageNotFoundException {
+	public Page getPage(Path path, CaptureLevel captureLevel) throws IOException {
 		for(PageRepository repository : repositories) {
-			if(repository.exists(path)) {
-				// Should we capture PageNotFoundException and try next?
-				// This would only make sense if exists is inconsistent with getPage.
-				return repository.getPage(path, captureLevel);
-			}
+			Page page = repository.getPage(path, captureLevel);
+			if(page != null) return page;
 		}
-		throw new PageNotFoundException(this, path);
+		return null;
 	}
 }

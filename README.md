@@ -1,4 +1,4 @@
-# [<img src="ao-logo.png" alt="AO Logo" width="35" height="40">](https://aoindustries.com/) [SemanticCMS](https://semanticcms.com/) / [Core](https://semanticcms.com/core/) / [Pages](https://semanticcms.com/core/pages/) / [Union](https://semanticcms.com/core/pages/union/)
+# [<img src="ao-logo.png" alt="AO Logo" width="35" height="40">](https://github.com/aoindustries) [SemanticCMS](https://github.com/aoindustries/semanticcms) / [Core](https://github.com/aoindustries/semanticcms-core) / [Pages](https://github.com/aoindustries/semanticcms-core-pages) / [Union](https://github.com/aoindustries/semanticcms-core-pages-union)
 <p>
 	<a href="https://aoindustries.com/life-cycle#project-alpha">
 		<img src="https://semanticcms.com/ao-badges/project-alpha.svg" alt="project: alpha" />
@@ -21,7 +21,7 @@
 	</a>
 </p>
 
-Combines multiple sets of [SemanticCMS](https://semanticcms.com/) pages.
+Combines multiple sets of [SemanticCMS](https://github.com/aoindustries/semanticcms) pages.
 
 ## Project Links
 * [Project Home](https://semanticcms.com/core/pages/union/)

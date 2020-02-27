@@ -1,6 +1,6 @@
 /*
  * semanticcms-core-pages-union - Combines multiple sets of SemanticCMS pages.
- * Copyright (C) 2017, 2018, 2019  AO Industries, Inc.
+ * Copyright (C) 2017, 2018, 2019, 2020  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -114,7 +114,10 @@ public class UnionPageRepository implements PageRepository {
 	}
 
 	/**
-	 * @implSpec  Searches all repositories in-order, returning the first one that returns non-null from {@link PageRepository#getPage(com.aoindustries.net.Path, com.semanticcms.core.pages.CaptureLevel)}.
+	 * {@inheritDoc}
+	 * <p>
+	 * Implementation Note: Searches all repositories in-order, returning the first one that returns non-null from {@link PageRepository#getPage(com.aoindustries.net.Path, com.semanticcms.core.pages.CaptureLevel)}.
+	 * </p>
 	 *
 	 * @return  the first page found or {@code null} when the page does not exist in any repository
 	 */

@@ -35,8 +35,6 @@ along with semanticcms-core-pages-union.  If not, see <http://www.gnu.org/licens
 	<properties>
 		<!-- These values are copied from the project being documented -->
 		<documented.artifactId>semanticcms-core-pages-union</documented.artifactId>
-		<documented.javaVersion>1.8</documented.javaVersion>
-		<documented.javac.link.javaApi>${javac.link.javaApi.jdk8}</documented.javac.link.javaApi>
 		<documented.name>SemanticCMS Core Pages Union²</documented.name>
 		<documented.shortTitle>Union</documented.shortTitle>
 		<documented.description>Combines multiple sets of SemanticCMS pages.</documented.description>

@@ -46,7 +46,7 @@ along with semanticcms-core-pages-union.  If not, see <http://www.gnu.org/licens
 				arg.projectStatus="alpha"
 				arg.managementStatus="preview"
 				arg.packagingStatus="developmental"
-				arg.javaVersion="@{documented.javaVersion}"
+				arg.javaseVersion="@{documented.javase.version}"
 				arg.semanticVersioning="2.0.0"
 				arg.license="lgpl-3.0"
 			/>

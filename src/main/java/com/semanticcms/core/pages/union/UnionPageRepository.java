@@ -116,7 +116,7 @@ public class UnionPageRepository implements PageRepository {
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * <b>Implementation Note:</b><br />
+	 * <b>Implementation Note:</b><br>
 	 * Searches all repositories in-order, returning the first one that returns non-null from {@link PageRepository#getPage(com.aoindustries.net.Path, com.semanticcms.core.pages.CaptureLevel)}.
 	 * </p>
 	 *

@@ -22,8 +22,8 @@
  */
 package com.semanticcms.core.pages.union;
 
+import com.aoindustries.collections.AoCollections;
 import com.aoindustries.net.Path;
-import com.aoindustries.util.AoCollections;
 import com.semanticcms.core.model.Page;
 import com.semanticcms.core.pages.CaptureLevel;
 import com.semanticcms.core.pages.PageRepository;

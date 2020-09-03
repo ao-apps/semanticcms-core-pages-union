@@ -59,7 +59,9 @@ public class UnionPageRepository implements PageRepository {
 	 */
 	public static UnionPageRepository getInstance(Iterable<PageRepository> repositories) {
 		List<PageRepository> list = new ArrayList<>();
-		for(PageRepository repository : repositories) list.add(repository);
+		for(PageRepository repository : repositories) {
+			list.add(repository);
+		}
 		return getInstance(list);
 	}
 
@@ -86,6 +88,7 @@ public class UnionPageRepository implements PageRepository {
 		this.unmodifiableRepositories = AoCollections.optimalUnmodifiableList(Arrays.asList(repositories));
 	}
 
+	@SuppressWarnings("ReturnOfCollectionOrArrayField") // Returning unmodifiable
 	public List<PageRepository> getRepositories() {
 		return unmodifiableRepositories;
 	}

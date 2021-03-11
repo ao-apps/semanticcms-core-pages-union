@@ -1,6 +1,6 @@
 /*
  * semanticcms-core-pages-union - Combines multiple sets of SemanticCMS pages.
- * Copyright (C) 2017, 2018, 2019, 2020  AO Industries, Inc.
+ * Copyright (C) 2017, 2018, 2019, 2020, 2021  AO Industries, Inc.
  *     support@aoindustries.com
  *     7262 Bull Pen Cir
  *     Mobile, AL 36695
@@ -39,7 +39,7 @@ import java.util.Map;
  */
 public class UnionPageRepository implements PageRepository {
 
-	private static final Map<List<PageRepository>,UnionPageRepository> unionRepositories = new HashMap<>();
+	private static final Map<List<PageRepository>, UnionPageRepository> unionRepositories = new HashMap<>();
 
 	/**
 	 * Gets the union repository representing the given set of repositories, creating a new repository only as-needed.

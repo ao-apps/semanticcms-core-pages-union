@@ -22,8 +22,8 @@
  */
 package com.semanticcms.core.pages.union;
 
-import com.aoindustries.collections.AoCollections;
-import com.aoindustries.net.Path;
+import com.aoapps.collections.AoCollections;
+import com.aoapps.net.Path;
 import com.semanticcms.core.model.Page;
 import com.semanticcms.core.pages.CaptureLevel;
 import com.semanticcms.core.pages.PageRepository;
@@ -120,7 +120,7 @@ public class UnionPageRepository implements PageRepository {
 	 * {@inheritDoc}
 	 * <p>
 	 * <b>Implementation Note:</b><br>
-	 * Searches all repositories in-order, returning the first one that returns non-null from {@link PageRepository#getPage(com.aoindustries.net.Path, com.semanticcms.core.pages.CaptureLevel)}.
+	 * Searches all repositories in-order, returning the first one that returns non-null from {@link PageRepository#getPage(com.aoapps.net.Path, com.semanticcms.core.pages.CaptureLevel)}.
 	 * </p>
 	 *
 	 * @return  the first page found or {@code null} when the page does not exist in any repository

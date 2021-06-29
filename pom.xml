@@ -33,6 +33,7 @@ along with semanticcms-core-pages-union.  If not, see <http://www.gnu.org/licens
 	<packaging>bundle</packaging>
 
 	<properties>
+		<module.name>com.semanticcms.core.pages.union</module.name>
 		<javadoc.breadcrumbs><![CDATA[<a target="${javadoc.target}" href="https://semanticcms.com/">SemanticCMS</a>
 / <a target="${javadoc.target}" href="https://semanticcms.com/core/">Core</a>
 / <a target="${javadoc.target}" href="https://semanticcms.com/core/pages/">Pages</a>

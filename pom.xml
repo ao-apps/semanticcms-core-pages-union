@@ -41,7 +41,7 @@ along with semanticcms-core-pages-union.  If not, see <http://www.gnu.org/licens
 		<description.html><![CDATA[Combines multiple sets of <a target="${javadoc.target}" href="https://semanticcms.com/">SemanticCMS</a> pages.]]></description.html>
 		<!-- SonarQube -->
 		<sonar.projectKey>${project.groupId}:${project.artifactId}</sonar.projectKey>
-		<sonar.organization>aoindustries</sonar.organization>
+		<sonar.organization>ao-apps</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<!-- TODO: Implement tests -->
 		<sonar.coverage.exclusions>**.*</sonar.coverage.exclusions>
@@ -76,20 +76,20 @@ along with semanticcms-core-pages-union.  If not, see <http://www.gnu.org/licens
 	</developers>
 
 	<scm>
-		<connection>scm:git:git://github.com/aoindustries/semanticcms-core-pages-union.git</connection>
-		<developerConnection>scm:git:git@github.com:aoindustries/semanticcms-core-pages-union.git</developerConnection>
-		<url>https://github.com/aoindustries/semanticcms-core-pages-union</url>
+		<connection>scm:git:git://github.com/ao-apps/semanticcms-core-pages-union.git</connection>
+		<developerConnection>scm:git:git@github.com:ao-apps/semanticcms-core-pages-union.git</developerConnection>
+		<url>https://github.com/ao-apps/semanticcms-core-pages-union</url>
 		<tag>HEAD</tag>
 	</scm>
 
 	<issueManagement>
 		<system>GitHub Issues</system>
-		<url>https://github.com/aoindustries/semanticcms-core-pages-union/issues</url>
+		<url>https://github.com/ao-apps/semanticcms-core-pages-union/issues</url>
 	</issueManagement>
 
 	<ciManagement>
 		<system>GitHub Actions</system>
-		<url>https://github.com/aoindustries/semanticcms-core-pages-union/actions</url>
+		<url>https://github.com/ao-apps/semanticcms-core-pages-union/actions</url>
 	</ciManagement>
 
 	<repositories>

@@ -212,7 +212,7 @@ along with semanticcms-core-pages-union.  If not, see <http://www.gnu.org/licens
 				<groupId>org.apache.commons</groupId><artifactId>commons-lang3</artifactId><version>3.12.0</version>
 			</dependency>
 			<dependency>
-				<groupId>joda-time</groupId><artifactId>joda-time</artifactId><version>2.10.12</version>
+				<groupId>joda-time</groupId><artifactId>joda-time</artifactId><version>2.10.13</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

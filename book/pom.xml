@@ -96,6 +96,9 @@ along with semanticcms-core-pages-union.  If not, see <https://www.gnu.org/licen
 			<releases>
 				<enabled>false</enabled>
 			</releases>
+			<snapshots>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
 		</repository>
 	</repositories>
 

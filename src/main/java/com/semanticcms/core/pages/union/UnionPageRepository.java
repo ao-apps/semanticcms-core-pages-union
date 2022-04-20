@@ -40,98 +40,106 @@ import java.util.Map;
  */
 public class UnionPageRepository implements PageRepository {
 
-	private static final Map<List<PageRepository>, UnionPageRepository> unionRepositories = new HashMap<>();
+  private static final Map<List<PageRepository>, UnionPageRepository> unionRepositories = new HashMap<>();
 
-	/**
-	 * Gets the union repository representing the given set of repositories, creating a new repository only as-needed.
-	 * Only one {@link UnionPageRepository} is created per unique list of underlying repositories.
-	 *
-	 * @param repositories  A defensive copy is made
-	 */
-	public static UnionPageRepository getInstance(PageRepository ... repositories) {
-		return getInstance(new ArrayList<>(Arrays.asList(repositories)));
-	}
+  /**
+   * Gets the union repository representing the given set of repositories, creating a new repository only as-needed.
+   * Only one {@link UnionPageRepository} is created per unique list of underlying repositories.
+   *
+   * @param repositories  A defensive copy is made
+   */
+  public static UnionPageRepository getInstance(PageRepository ... repositories) {
+    return getInstance(new ArrayList<>(Arrays.asList(repositories)));
+  }
 
-	/**
-	 * Gets the union repository representing the given set of repositories, creating a new repository only as-needed.
-	 * Only one {@link UnionPageRepository} is created per unique list of underlying repositories.
-	 *
-	 * @param repositories  Iterated once only.
-	 */
-	public static UnionPageRepository getInstance(Iterable<PageRepository> repositories) {
-		List<PageRepository> list = new ArrayList<>();
-		for(PageRepository repository : repositories) {
-			list.add(repository);
-		}
-		return getInstance(list);
-	}
+  /**
+   * Gets the union repository representing the given set of repositories, creating a new repository only as-needed.
+   * Only one {@link UnionPageRepository} is created per unique list of underlying repositories.
+   *
+   * @param repositories  Iterated once only.
+   */
+  public static UnionPageRepository getInstance(Iterable<PageRepository> repositories) {
+    List<PageRepository> list = new ArrayList<>();
+    for (PageRepository repository : repositories) {
+      list.add(repository);
+    }
+    return getInstance(list);
+  }
 
-	/**
-	 * Only one {@link UnionPageRepository} is created per unique list of underlying repositories.
-	 */
-	private static UnionPageRepository getInstance(List<PageRepository> stores) {
-		if(stores.isEmpty()) throw new IllegalArgumentException("At least one store required");
-		synchronized(unionRepositories) {
-			UnionPageRepository unionRepository = unionRepositories.get(stores);
-			if(unionRepository == null) {
-				unionRepository = new UnionPageRepository(stores.toArray(new PageRepository[stores.size()]));
-				unionRepositories.put(stores, unionRepository);
-			}
-			return unionRepository;
-		}
-	}
+  /**
+   * Only one {@link UnionPageRepository} is created per unique list of underlying repositories.
+   */
+  private static UnionPageRepository getInstance(List<PageRepository> stores) {
+    if (stores.isEmpty()) {
+      throw new IllegalArgumentException("At least one store required");
+    }
+    synchronized (unionRepositories) {
+      UnionPageRepository unionRepository = unionRepositories.get(stores);
+      if (unionRepository == null) {
+        unionRepository = new UnionPageRepository(stores.toArray(new PageRepository[stores.size()]));
+        unionRepositories.put(stores, unionRepository);
+      }
+      return unionRepository;
+    }
+  }
 
-	private final PageRepository[] repositories;
-	private final List<PageRepository> unmodifiableRepositories;
+  private final PageRepository[] repositories;
+  private final List<PageRepository> unmodifiableRepositories;
 
-	private UnionPageRepository(PageRepository[] repositories) {
-		this.repositories = repositories;
-		this.unmodifiableRepositories = AoCollections.optimalUnmodifiableList(Arrays.asList(repositories));
-	}
+  private UnionPageRepository(PageRepository[] repositories) {
+    this.repositories = repositories;
+    this.unmodifiableRepositories = AoCollections.optimalUnmodifiableList(Arrays.asList(repositories));
+  }
 
-	@SuppressWarnings("ReturnOfCollectionOrArrayField") // Returning unmodifiable
-	public List<PageRepository> getRepositories() {
-		return unmodifiableRepositories;
-	}
+  @SuppressWarnings("ReturnOfCollectionOrArrayField") // Returning unmodifiable
+  public List<PageRepository> getRepositories() {
+    return unmodifiableRepositories;
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("union(");
-		for(int i = 0; i < repositories.length; i++) {
-			PageRepository repository = repositories[i];
-			if(i > 0) sb.append(", ");
-			sb.append(repository.toString());
-		}
-		return sb.append("):").toString();
-	}
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("union(");
+    for (int i = 0; i < repositories.length; i++) {
+      PageRepository repository = repositories[i];
+      if (i > 0) {
+        sb.append(", ");
+      }
+      sb.append(repository.toString());
+    }
+    return sb.append("):").toString();
+  }
 
-	/**
-	 * Available when all repositories are available.
-	 */
-	@Override
-	public boolean isAvailable() {
-		for(PageRepository repository : repositories) {
-			if(!repository.isAvailable()) return false;
-		}
-		return true;
-	}
+  /**
+   * Available when all repositories are available.
+   */
+  @Override
+  public boolean isAvailable() {
+    for (PageRepository repository : repositories) {
+      if (!repository.isAvailable()) {
+        return false;
+      }
+    }
+    return true;
+  }
 
-	/**
-	 * {@inheritDoc}
-	 * <p>
-	 * <b>Implementation Note:</b><br>
-	 * Searches all repositories in-order, returning the first one that returns non-null from {@link PageRepository#getPage(com.aoapps.net.Path, com.semanticcms.core.pages.CaptureLevel)}.
-	 * </p>
-	 *
-	 * @return  the first page found or {@code null} when the page does not exist in any repository
-	 */
-	@Override
-	public Page getPage(Path path, CaptureLevel captureLevel) throws IOException {
-		for(PageRepository repository : repositories) {
-			Page page = repository.getPage(path, captureLevel);
-			if(page != null) return page;
-		}
-		return null;
-	}
+  /**
+   * {@inheritDoc}
+   * <p>
+   * <b>Implementation Note:</b><br>
+   * Searches all repositories in-order, returning the first one that returns non-null from {@link PageRepository#getPage(com.aoapps.net.Path, com.semanticcms.core.pages.CaptureLevel)}.
+   * </p>
+   *
+   * @return  the first page found or {@code null} when the page does not exist in any repository
+   */
+  @Override
+  public Page getPage(Path path, CaptureLevel captureLevel) throws IOException {
+    for (PageRepository repository : repositories) {
+      Page page = repository.getPage(path, captureLevel);
+      if (page != null) {
+        return page;
+      }
+    }
+    return null;
+  }
 }

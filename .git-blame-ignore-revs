@@ -13,3 +13,6 @@ c0268aea908b9fe86ca16f68a9763c1eeca24a8d
 
 # Created AnyContent interface and AnyDocument base implementation
 11d6c8a1889537037320962d1fe69b8317872bc2
+
+# Performed manual checkstyle clean-up
+e46c5f2ed3509cdaed72f20c5d4308607f8408db

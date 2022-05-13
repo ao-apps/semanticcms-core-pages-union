@@ -27,4 +27,4 @@ module com.semanticcms.core.pages.union {
   requires com.aoapps.net.types; // <groupId>com.aoapps</groupId><artifactId>ao-net-types</artifactId>
   requires com.semanticcms.core.model; // <groupId>com.semanticcms</groupId><artifactId>semanticcms-core-model</artifactId>
   requires com.semanticcms.core.pages; // <groupId>com.semanticcms</groupId><artifactId>semanticcms-core-pages</artifactId>
-} // TODO: Avoiding rewrite-maven-plugin-4.22.2 truncation
+}

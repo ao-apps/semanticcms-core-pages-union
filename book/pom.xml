@@ -36,15 +36,15 @@ along with semanticcms-core-pages-union.  If not, see <https://www.gnu.org/licen
     <module.name>com.semanticcms.core.pages.union.book</module.name>
     <!-- These values are copied from the project being documented -->
     <documented.artifactId>semanticcms-core-pages-union</documented.artifactId>
-    <documented.name>SemanticCMS Core Pages Union²</documented.name>
+    <documented.name>SemanticCMS Core Pages Union</documented.name>
     <documented.description>Combines multiple sets of SemanticCMS pages.</documented.description>
 
     <description.html><![CDATA[Documentation for <a target="${javadoc.target}" href="${project.url}">${documented.name}</a> in <a target="${javadoc.target}" href="https://semanticcms.com/">SemanticCMS</a> format.]]></description.html>
   </properties>
 
-  <name>SemanticCMS Core Pages Union² Book</name>
+  <name>SemanticCMS Core Pages Union Book</name>
   <url>https://semanticcms.com/core/pages/union/</url>
-  <description>Documentation for SemanticCMS Core Pages Union² in SemanticCMS format.</description>
+  <description>Documentation for SemanticCMS Core Pages Union in SemanticCMS format.</description>
   <inceptionYear>2017</inceptionYear>
 
   <licenses>

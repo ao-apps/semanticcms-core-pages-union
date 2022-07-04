@@ -47,7 +47,7 @@ along with semanticcms-core-pages-union.  If not, see <https://www.gnu.org/licen
     <sonar.coverage.exclusions>**.*</sonar.coverage.exclusions>
   </properties>
 
-  <name>SemanticCMS Core Pages Union²</name>
+  <name>SemanticCMS Core Pages Union</name>
   <url>https://semanticcms.com/core/pages/union/</url>
   <description>Combines multiple sets of SemanticCMS pages.</description>
   <inceptionYear>2017</inceptionYear>

@@ -48,7 +48,7 @@ public class UnionPageRepository implements PageRepository {
    *
    * @param repositories  A defensive copy is made
    */
-  public static UnionPageRepository getInstance(PageRepository ... repositories) {
+  public static UnionPageRepository getInstance(PageRepository... repositories) {
     return getInstance(new ArrayList<>(Arrays.asList(repositories)));
   }
 
